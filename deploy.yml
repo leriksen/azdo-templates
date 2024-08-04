@@ -6,7 +6,7 @@ stages:
   - stage: deploy
     jobs:
       - ${{ each deployment in parameters.json }}:
-          - deployment: deploy
+          - deployment: deploy-${{ deployment.name }}
             displayName: Deploy
             environment: data
             workspace:
