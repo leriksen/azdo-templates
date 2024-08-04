@@ -26,7 +26,8 @@ stages:
                     - bash: |
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
-                        echo "service-name $(serviceName)"
+                        echo "serviceName $(serviceName)"
+                        echo "serviceConnection $(serviceConnection)"
                     - task: AzureCLI@2
                       inputs:
                         azureSubscription: ${{ variables.serviceConnection }}
