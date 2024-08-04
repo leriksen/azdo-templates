@@ -1,0 +1,20 @@
+parameters:
+  - name: json
+    type: object
+
+stages:
+  - stage: deploy
+    jobs:
+      - ${{ each deployment in parameters.json }}:
+          - deployment: deploy
+            displayName: Deploy
+            environment: data
+            workspace:
+              clean: all
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                    - bash: |
+                        echo "name ${{ deployment.name }}"
+                        echo "path ${{ deployment.path }}"
