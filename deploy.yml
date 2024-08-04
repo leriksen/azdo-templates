@@ -14,7 +14,7 @@ stages:
       - ${{ each deployment in parameters.json }}:
           - deployment: deploy_${{ replace(deployment.name, '-', '_') }}
             displayName: Deploy ${{ upper(deployment.name) }}
-            environment: ${{ variables.environment }}
+            environment: ${{ parameters .environment }}
             pool:
               name: $(agentPool)
             workspace:
@@ -27,3 +27,10 @@ stages:
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
                         echo "service-name $(serviceName)"
+                    - task: AzureCLI@2
+                      inputs:
+                        azureSubscription: $(serviceConnection)
+                        scriptType: pscore
+                        scriptLocation: inlineScript
+                        inlineScript: |
+                          az account get-access-token --query accessToken
