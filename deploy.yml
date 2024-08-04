@@ -29,7 +29,7 @@ stages:
                         echo "service-name $(serviceName)"
                     - task: AzureCLI@2
                       inputs:
-                        azureSubscription: $(serviceConnection)
+                        azureSubscription: ${{ variables.serviceConnection }}
                         scriptType: pscore
                         scriptLocation: inlineScript
                         inlineScript: |
