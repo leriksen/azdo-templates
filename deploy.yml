@@ -13,6 +13,8 @@ stages:
           - deployment: deploy_${{ deployment.name }}
             displayName: Deploy ${{ upper(deployment.name) }}
             environment: data
+            pool:
+              name: $(agent-pool)
             workspace:
               clean: all
             strategy:
