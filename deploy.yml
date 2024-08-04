@@ -1,6 +1,8 @@
 parameters:
   - name: variables
     type: string
+  - name: environment
+    type: string
   - name: json
     type: object
 
@@ -12,7 +14,7 @@ stages:
       - ${{ each deployment in parameters.json }}:
           - deployment: deploy_${{ replace(deployment.name, '-', '_') }}
             displayName: Deploy ${{ upper(deployment.name) }}
-            environment: ${{ variables['environment'] }}
+            environment: ${{ parameters.environment }}
             pool:
               name: $(agent-pool)
             workspace:
