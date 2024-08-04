@@ -16,7 +16,7 @@ stages:
             displayName: Deploy ${{ upper(deployment.name) }}
             environment: ${{ parameters.environment }}
             pool:
-              name: $(agent-pool)
+              name: $(agentPool)
             workspace:
               clean: all
             strategy:
@@ -26,4 +26,4 @@ stages:
                     - bash: |
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
-                        echo "service-name $(service-name)"
+                        echo "service-name $(serviceName)"
