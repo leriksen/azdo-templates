@@ -3,6 +3,8 @@ parameters:
     type: string
   - name: environment
     type: string
+  - name: serviceConnection
+    type: string
   - name: json
     type: object
 
@@ -27,10 +29,9 @@ stages:
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
                         echo "serviceName $(serviceName)"
-                        echo "serviceConnection $(serviceConnection)"
                     - task: AzureCLI@2
                       inputs:
-                        azureSubscription: ${{ variables['serviceConnection'] }}
+                        azureSubscription: ${{ parameter.serviceConnection }}
                         scriptType: pscore
                         scriptLocation: inlineScript
                         inlineScript: |
