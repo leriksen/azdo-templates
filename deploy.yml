@@ -1,9 +1,13 @@
 parameters:
+  - name: variables
+    type: string
   - name: json
     type: object
 
 stages:
   - stage: deploy
+    variables:
+      - group: ${{ parameters.variables }}
     jobs:
       - ${{ each deployment in parameters.json }}:
           - deployment: deploy_${{ deployment.name }}
@@ -18,3 +22,4 @@ stages:
                     - bash: |
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
+                        echo "service-name $(service-name)"
