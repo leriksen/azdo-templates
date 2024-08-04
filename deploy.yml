@@ -12,7 +12,7 @@ stages:
       - ${{ each deployment in parameters.json }}:
           - deployment: deploy_${{ replace(deployment.name, '-', '_') }}
             displayName: Deploy ${{ upper(deployment.name) }}
-            environment: $(environment)
+            environment: ${{ variables.environment }}
             pool:
               name: $(agent-pool)
             workspace:
