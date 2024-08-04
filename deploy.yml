@@ -10,9 +10,9 @@ stages:
       - group: ${{ parameters.variables }}
     jobs:
       - ${{ each deployment in parameters.json }}:
-          - deployment: deploy_${{ deployment.name }}
+          - deployment: deploy_${{ replace(deployment.name, '-', '_') }}
             displayName: Deploy ${{ upper(deployment.name) }}
-            environment: data
+            environment: $(environment)
             pool:
               name: $(agent-pool)
             workspace:
