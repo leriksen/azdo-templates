@@ -32,6 +32,7 @@ stages:
               runOnce:
                 deploy:
                   steps:
+                    - checkout: self
                     - bash: |
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
