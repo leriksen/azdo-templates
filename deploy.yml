@@ -47,7 +47,7 @@ stages:
                         inlineScript: |
                           $apiVersion = "2024-07-01"
                           
-                          Write-Host "creating ${{ parameters.resourceType }} ${{ deployment,name }}, in $(serviceName), using data from ${{ deployment.payload }}" 
+                          Write-Host "creating ${{ parameters.resourceType }} ${{ deployment.name }}, in $(serviceName), using data from ${{ deployment.payload }}" 
                           
                           $body = Get-Content ${{ datasource.payload }} | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 10
                           $uri = "https://$(serviceName).search.windows.net/${{ parameters.resourceType }}('${{ datasource.name }}')?api-version=${apiVersion}"
