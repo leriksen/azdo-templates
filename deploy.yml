@@ -60,5 +60,5 @@ stages:
 
                           Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers @{
                             "Authorization" = $token
-                            "Content-Type"  = "application-json"
+                            "Content-Type"  = "application/json"
                           }
