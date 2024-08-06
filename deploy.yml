@@ -36,7 +36,7 @@ stages:
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
                         echo "serviceName $(serviceName)"
-                        echo "resourceType ${{ parameters.resourceType }}
+                        echo "resourceType ${{ parameters.resourceType }}"
                       displayName: Display parameters
                     - task: AzureCLI@2
                       displayName: create resource ${{ parameters.resourceType }}
