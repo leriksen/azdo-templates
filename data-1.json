@@ -1,0 +1,11 @@
+{
+  "name": "python",
+  "description": "From CI/CD pipelines",
+  "type": "azureblob",
+  "credentials": {
+    "connectionString": "ResourceId=/subscriptions/743b758a-f6e7-4823-b706-950a64a6c9f9/resourceGroups/ai-search/providers/Microsoft.Storage/storageAccounts/leifdocsource"
+  },
+  "container": {
+    "name": "python"
+  }
+}

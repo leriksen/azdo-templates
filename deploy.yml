@@ -5,6 +5,13 @@ parameters:
     type: string
   - name: serviceConnection
     type: string
+  - name: resourceType
+    type: string
+    values:
+      - datasources
+      - indexes
+      - indexers
+      - skillsets
   - name: json
     type: object
 
@@ -29,10 +36,27 @@ stages:
                         echo "name ${{ deployment.name }}"
                         echo "path ${{ deployment.path }}"
                         echo "serviceName $(serviceName)"
+                        echo "resourceType ${{ parameters.resourceType }}
                     - task: AzureCLI@2
+                      displayName: create resource ${{ parameters.resourceType }}
                       inputs:
                         azureSubscription: ${{ parameters.serviceConnection }}
                         scriptType: pscore
                         scriptLocation: inlineScript
                         inlineScript: |
-                          az account get-access-token --query accessToken
+                          $apiVersion = "2024-07-01"
+                          
+                          Write-Host "creating ${{ parameters.resourceType }} ${{ deployment,name }}, in $(serviceName), using data from ${{ deployment.payload }}" 
+                          
+                          $body = Get-Content ${{ datasource.payload }} | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 10
+                          $uri = "https://$(serviceName).search.windows.net/${{ parameters.resourceType }}('${{ datasource.name }}')?api-version=${apiVersion}"
+                          
+                          $tokenRequest = az account get-access-token --scope https://search.azure.com/.default | ConvertFrom-Json
+                          $token = "Bearer {0}" -f $tokenRequest.accessToken
+                          
+                          Write-Host "Invoke-RestMethod -Method PUT -Uri $uri -Body $body"
+
+                          Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers @{
+                            "Authorization" = $token
+                            "Content-Type"  = "application-json"
+                          }
