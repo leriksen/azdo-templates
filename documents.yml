@@ -8,7 +8,7 @@ stages:
   - stage: deploy
     jobs:
       - ${{ each deployment in parameters.documents }}:
-        - deployment: deploy_documents_${{ deployment.container }}
+        - deployment: deploy_documents_${{ replace(deployment.container, '-', '_') }}
           displayName: Deploy Documents To ${{ deployment.container }}
           environment: ${{ parameters.environment }}
           pool:
