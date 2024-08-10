@@ -24,7 +24,7 @@ stages:
                   steps:
                     - checkout: self
 
-                    - ${{ each deployment in parameters.json }}:
+                    - ${{ each deployment in parameters.documents }}:
 
                       - bash: |
                           echo "name ${{ deployment.source }}"
