@@ -1,0 +1,54 @@
+parameters:
+  - name: variables
+    type: string
+  - name: environment
+    type: string
+  - name: documents
+    type: object
+
+stages:
+  - stage: deploy
+    variables:
+      - group: ${{ parameters.variables }}
+    jobs:
+          - deployment: deploy_documents
+            displayName: Deploy Documents
+            environment: ${{ parameters.environment }}
+            pool:
+              name: $(agentPool)
+            workspace:
+              clean: all
+            strategy:
+              runOnce:
+                deploy:
+                  steps:
+                    - checkout: self
+
+                    - ${{ each deployment in parameters.json }}:
+
+                      - bash: |
+                          echo "name ${{ deployment.source }}"
+                          echo "path ${{ deployment.container }}"
+                        displayName: Display parameters
+
+                      - task: Powershell@2
+                        displayName: download ${{ deployment.source }}
+                        inputs:
+                          targetType: inline
+                          script: |
+                            $artifactoryDownloadDirectory = "downloads"
+                            $artifactoryFQDN = "https://personal.jfrog.io"
+                            $artifactoryAssetPath = "artifactory/api/archive/" + ${{ deployment.source }}
+                            $artifactoryFileUrl = "${artifactoryFQDN}/${artifactoryAssetPath}"
+                            $localFilePath = "${$artifactoryDownloadDirectory}/$(Split-Path -Leaf ${artifactoryAssetPath})"
+                            
+                            Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
+                            Write-Host "artifactoryFQDN              == $artifactoryFQDN"
+                            Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
+                            Write-Host "artifactoryFileUrl           == $artifactoryFileUrl"
+                            Write-Host "localFilePath                == $localFilePath"
+                            
+                            New-Item -ItemType Directory -Force -Path $artifactoryDownloadDirectory | Out-Null
+                          pwsh: true
+
+                      - bash: pwd && ls -al downloads
