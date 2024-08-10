@@ -1,6 +1,4 @@
 parameters:
-  - name: variables
-    type: string
   - name: environment
     type: string
   - name: documents
@@ -8,8 +6,6 @@ parameters:
 
 stages:
   - stage: deploy
-    variables:
-      - group: ${{ parameters.variables }}
     jobs:
           - deployment: deploy_documents
             displayName: Deploy Documents
