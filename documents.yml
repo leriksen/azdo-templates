@@ -44,7 +44,7 @@ stages:
                             Write-Host "artifactoryFileUrl           == $artifactoryFileUrl"
                             Write-Host "localFilePath                == $localFilePath"
                             
-                            New-Item -ItemType Directory -Force -Path $artifactoryDownloadDirectory | Out-Null
+                            New-Item -ItemType Directory -Force -Path $artifactoryDownloadDirectory
                           pwsh: true
 
                       - bash: pwd && ls -al downloads
