@@ -30,6 +30,7 @@ stages:
                       - task: Powershell@2
                         displayName: download ${{ deployment.source }}
                         inputs:
+                          pwsh: true
                           targetType: inline
                           script: |
                             $artifactoryDownloadDirectory = "downloads"
@@ -45,6 +46,5 @@ stages:
                             Write-Host "localFilePath                == $localFilePath"
                             
                             New-Item -ItemType Directory -Force -Path $artifactoryDownloadDirectory
-                          pwsh: true
 
-                      - bash: pwd && ls -al downloads
+                      - bash: pwd && ls -al
