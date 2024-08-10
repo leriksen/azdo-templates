@@ -7,20 +7,19 @@ parameters:
 stages:
   - stage: deploy
     jobs:
-          - deployment: deploy_documents
-            displayName: Deploy Documents
-            environment: ${{ parameters.environment }}
-            pool:
-              name: $(agentPool)
-            workspace:
-              clean: all
-            strategy:
-              runOnce:
-                deploy:
-                  steps:
-                    - checkout: self
-
-                    - ${{ each deployment in parameters.documents }}:
+      - ${{ each deployment in parameters.documents }}:
+        - deployment: deploy_documents_${{ deployment.container }}
+              displayName: Deploy Documents To ${{ deployment.container }}
+              environment: ${{ parameters.environment }}
+              pool:
+                name: $(agentPool)
+              workspace:
+                clean: all
+              strategy:
+                runOnce:
+                  deploy:
+                    steps:
+                      - checkout: self
 
                       - bash: |
                           echo "name ${{ deployment.source }}"
