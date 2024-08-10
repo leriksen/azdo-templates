@@ -9,41 +9,41 @@ stages:
     jobs:
       - ${{ each deployment in parameters.documents }}:
         - deployment: deploy_documents_${{ deployment.container }}
-              displayName: Deploy Documents To ${{ deployment.container }}
-              environment: ${{ parameters.environment }}
-              pool:
-                name: $(agentPool)
-              workspace:
-                clean: all
-              strategy:
-                runOnce:
-                  deploy:
-                    steps:
-                      - checkout: self
+          displayName: Deploy Documents To ${{ deployment.container }}
+          environment: ${{ parameters.environment }}
+          pool:
+            name: $(agentPool)
+          workspace:
+            clean: all
+          strategy:
+            runOnce:
+              deploy:
+                steps:
+                  - checkout: self
 
-                      - bash: |
-                          echo "name ${{ deployment.source }}"
-                          echo "path ${{ deployment.container }}"
-                        displayName: Display parameters
+                  - bash: |
+                      echo "name ${{ deployment.source }}"
+                      echo "path ${{ deployment.container }}"
+                    displayName: Display parameters
 
-                      - task: Powershell@2
-                        displayName: download ${{ deployment.source }}
-                        inputs:
-                          pwsh: true
-                          targetType: inline
-                          script: |
-                            $artifactoryDownloadDirectory = "downloads"
-                            $artifactoryFQDN              = "https://personal.jfrog.io"
-                            $artifactoryAssetPath         = "artifactory/api/archive/${{ deployment.source }}"
-                            $artifactoryFileUrl           = "${artifactoryFQDN}/${artifactoryAssetPath}"
-                            $localFilePath                = "${$artifactoryDownloadDirectory}/$(Split-Path -Leaf ${artifactoryAssetPath})"
-                            
-                            Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
-                            Write-Host "artifactoryFQDN              == $artifactoryFQDN"
-                            Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
-                            Write-Host "artifactoryFileUrl           == $artifactoryFileUrl"
-                            Write-Host "localFilePath                == $localFilePath"
-                            
-                            New-Item -ItemType Directory -Force -Path $artifactoryDownloadDirectory
+                  - task: Powershell@2
+                    displayName: download ${{ deployment.source }}
+                    inputs:
+                      pwsh: true
+                      targetType: inline
+                      script: |
+                        $artifactoryDownloadDirectory = "downloads"
+                        $artifactoryFQDN              = "https://personal.jfrog.io"
+                        $artifactoryAssetPath         = "artifactory/api/archive/${{ deployment.source }}"
+                        $artifactoryFileUrl           = "${artifactoryFQDN}/${artifactoryAssetPath}"
+                        $localFilePath                = "${$artifactoryDownloadDirectory}/$(Split-Path -Leaf ${artifactoryAssetPath})"
+                        
+                        Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
+                        Write-Host "artifactoryFQDN              == $artifactoryFQDN"
+                        Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
+                        Write-Host "artifactoryFileUrl           == $artifactoryFileUrl"
+                        Write-Host "localFilePath                == $localFilePath"
+                        
+                        New-Item -ItemType Directory -Force -Path $artifactoryDownloadDirectory
 
-                      - bash: pwd && ls -al
+                  - bash: pwd && ls -al
