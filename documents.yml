@@ -7,6 +7,7 @@ parameters:
 stages:
   - stage: deploy
     jobs:
+      # noinspection YAMLSchemaValidation
       - ${{ each deployment in parameters.documents }}:
         - deployment: deploy_documents_${{ replace(deployment.container, '-', '_') }}
           displayName: Deploy Documents To ${{ deployment.container }}
@@ -33,17 +34,48 @@ stages:
                       targetType: inline
                       script: |
                         $artifactoryDownloadDirectory = "downloads"
+                        $artifactoryExpandedDirectory = "${{ deployment.container }}"
                         $artifactoryFQDN              = "https://personal.jfrog.io"
                         $artifactoryAssetPath         = "artifactory/api/archive/${{ deployment.source }}"
                         $artifactoryFileUrl           = "${artifactoryFQDN}/${artifactoryAssetPath}"
-                        $localFilePath                = "${$artifactoryDownloadDirectory}/$(Split-Path -Leaf ${artifactoryAssetPath})"
+                        $baseFile                     = Split-Path -Leaf ${artifactoryAssetPath}
+                        $localFilePath                = "${artifactoryDownloadDirectory}/${baseFile}"
+                        $expandedFilePath             = "${artifactoryExpandedDirectory}/${baseFile}"
                         
                         Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
                         Write-Host "artifactoryFQDN              == $artifactoryFQDN"
                         Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
                         Write-Host "artifactoryFileUrl           == $artifactoryFileUrl"
                         Write-Host "localFilePath                == $localFilePath"
+                        Write-Host "expandedFilePath             == $expandedFilePath"
                         
                         New-Item -ItemType Directory -Force -Path $artifactoryDownloadDirectory
+                        New-Item -ItemType Directory -Force -Path $artifactoryExpandedDirectory
+                        
+                        # Invoke-RestMethod -Method GET -Uri $artifactoryFileUrl - Outfile $artifactoryDownloadDirectory -Headers @{
+                        #   Content-Type = "application/json"
+                        #   Authentication = "Basic " + [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$(username):$(apiKey)"))
+                        # }
+                        
+                        Copy-Item -Path ${{ deployment.source }} -Destination $localFilePath
+                        
+                        Expand-Archive -Path $localFilePath -Destination "${artifactoryExpandedDirectory}/${baseFile}"
+                  - task: AzurePowershell@5
+                    displayName: upload archive to storage account
+                    inputs:
+                      azureSubscription: dev01
+                      scriptType: InlineScript
+                      pwsh: true
+                      Inline: |
+                        $context = New-AzStorageContext -StorageAccountName leifdocsource
 
-                  - bash: pwd && ls -al
+                        $artifactoryExpandedDirectory = "${{ deployment.container }}"
+                        $artifactoryAssetPath         = "${{ deployment.source }}"
+                        $baseFile                     = Split-Path -Leaf ${artifactoryAssetPath}
+                        $localFilePath                = "${artifactoryExpandedDirectory}/${baseFile}"
+                        
+                        Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
+                        Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
+                        Write-Host "localFilePath                == $localFilePath"
+                        
+                        Set=AzStorageBlobContent -File $localFilePath -Container ${{ deployment.container }} -Blob leifdocsource -Conte                         
