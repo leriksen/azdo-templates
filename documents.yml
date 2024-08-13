@@ -73,7 +73,7 @@ stages:
                         $artifactoryAssetPath         = "${{ deployment.source }}"
                         $baseFile                     = Split-Path -Leaf ${artifactoryAssetPath}
 
-#                        $localFilePath                = "${artifactoryExpandedDirectory}/${baseFile}"
+                        # $localFilePath                = "${artifactoryExpandedDirectory}/${baseFile}"
                         $localFilePath                = "${artifactoryExpandedDirectory}/modules/context/globals/outputs.tf"
                         
                         Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
