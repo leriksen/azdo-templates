@@ -81,8 +81,8 @@ stages:
                         # $localFilePath                = "${artifactoryExpandedDirectory}/${baseFile}"
                         $localFilePath                = "${artifactoryExpandedDirectory}/modules.zip/modules/context/globals/outputs.tf"
                         
-                        Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
+                        Write-Host "artifactoryExpandedDirectory == $artifactoryExpandedDirectory"
                         Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
                         Write-Host "localFilePath                == $localFilePath"
                         
-                        Set-AzStorageBlobContent -File $localFilePath -Container ${{ deployment.container }} -Blob leifdocsource -Context $context
+                        Set-AzStorageBlobContent -File $localFilePath -Container ${{ deployment.container }} -Blob $localFilePath -Context $context
