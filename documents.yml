@@ -60,6 +60,11 @@ stages:
                         Copy-Item -Path ${{ deployment.source }} -Destination $localFilePath
                         
                         Expand-Archive -Path $localFilePath -Destination "${artifactoryExpandedDirectory}/${baseFile}"
+                  - bash: | 
+                      cd ${{ deployment.source }}
+                      pwd
+                      tree .
+
                   - task: AzurePowershell@5
                     displayName: upload archive to storage account
                     inputs:
