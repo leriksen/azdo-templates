@@ -61,8 +61,7 @@ stages:
                         
                         Expand-Archive -Path $localFilePath -Destination "${artifactoryExpandedDirectory}/${baseFile}"
                   - bash: | 
-                      cd ${{ deployment.source }}
-                      pwd
+                      cd ${{ deployment.source }}/modules.zip
                       tree .
 
                   - task: AzurePowershell@5
@@ -80,7 +79,7 @@ stages:
                         $baseFile                     = Split-Path -Leaf ${artifactoryAssetPath}
 
                         # $localFilePath                = "${artifactoryExpandedDirectory}/${baseFile}"
-                        $localFilePath                = "${artifactoryExpandedDirectory}/context/globals/outputs.tf"
+                        $localFilePath                = "${artifactoryExpandedDirectory}/modules/modules.zip/modules/context/globals/outputs.tf"
                         
                         Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
                         Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
