@@ -66,6 +66,7 @@ stages:
                       azureSubscription: dev01
                       scriptType: InlineScript
                       pwsh: true
+                      azurePowerShellVersion: LatestVersion
                       Inline: |
                         $context = New-AzStorageContext -StorageAccountName "leifdocsource"
 
