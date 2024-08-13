@@ -79,7 +79,7 @@ stages:
                         $baseFile                     = Split-Path -Leaf ${artifactoryAssetPath}
 
                         # $localFilePath                = "${artifactoryExpandedDirectory}/${baseFile}"
-                        $localFilePath                = "${artifactoryExpandedDirectory}/modules/modules.zip/modules/context/globals/outputs.tf"
+                        $localFilePath                = "${artifactoryExpandedDirectory}/modules.zip/modules/context/globals/outputs.tf"
                         
                         Write-Host "artifactoryDownloadDirectory == $artifactoryDownloadDirectory"
                         Write-Host "artifactoryAssetPath         == $artifactoryAssetPath"
