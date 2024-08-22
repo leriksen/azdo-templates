@@ -46,24 +46,25 @@ stages:
                       $apiVersion = "2024-07-01"
                       
                       Write-Host "creating ${{ parameters.resourceType }}, in $(serviceName), using data from ${{ parameters.jsonPath }}" 
-
-                      ls
                       
                       $json = Get-Content ${{ parameters.jsonPath }}/${{ parameters.environment }}/data.json | ConvertFrom-Json
                       
                       foreach ($resource in $json) {
                         Write-Host "Processing " $resource.name
+                        $resourceName = $resource.name
+                      
+                        $body = $resource.payload | ConvertTo-Json -Compress -Depth 10
+                        
+                        $uri = "https://$(serviceName).search.windows.net/${{ parameters.resourceType }}('${resourceName}')?api-version=${apiVersion}"
+  
+                        $tokenRequest = az account get-access-token --scope https://search.azure.com/.default | ConvertFrom-Json
+                        $token = "Bearer {0}" -f $tokenRequest.accessToken
+  
+                        Write-Host $tokenRequest.accessToken
+                        Write-Host "Invoke-RestMethod -Method PUT -Uri $uri -Body $body"
+  
+                        Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers @{
+                          "Authorization" = $token
+                          "Content-Type"  = "application/json"
+                        }
                       }
-#                      $body = Get-Content ${{ deployment.payload }} | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 10
-#                      $uri = "https://$(serviceName).search.windows.net/${{ parameters.resourceType }}('${{ deployment.name }}')?api-version=${apiVersion}"
-#
-#                      $tokenRequest = az account get-access-token --scope https://search.azure.com/.default | ConvertFrom-Json
-#                      $token = "Bearer {0}" -f $tokenRequest.accessToken
-#
-#                      Write-Host $tokenRequest.accessToken
-#                      Write-Host "Invoke-RestMethod -Method PUT -Uri $uri -Body $body"
-#
-#                      Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers @{
-#                        "Authorization" = $token
-#                        "Content-Type"  = "application/json"
-#                      }
