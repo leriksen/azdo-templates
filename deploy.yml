@@ -47,7 +47,7 @@ stages:
                       
                       Write-Host "creating ${{ parameters.resourceType }}, in $(serviceName), using data from ${{ parameters.jsonPath }}" 
 
-                      Write-Host gci
+                      ls
                       
                       $json = Get-Content ${{ parameters.jsonPath }}/data.json | ConvertFrom-Json
                       
