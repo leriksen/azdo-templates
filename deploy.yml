@@ -49,7 +49,7 @@ stages:
 
                       ls
                       
-                      $json = Get-Content ${{ parameters.jsonPath }}/data.json | ConvertFrom-Json
+                      $json = Get-Content ${{ parameters.jsonPath }}/${{ parameters.environment }}/data.json | ConvertFrom-Json
                       
                       foreach ($resource in $json) {
                         Write-Host "Processing $resource.name"
