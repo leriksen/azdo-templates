@@ -14,6 +14,10 @@ parameters:
       - skillsets
   - name: jsonPath
     type: string
+  - name: agentPool
+    type: string
+    default:
+      vmImage: ubuntu-latest
 
 stages:
   - stage: deploy
@@ -24,7 +28,7 @@ stages:
         displayName: Deploy ${{ parameters.resourceType }}
         environment: ${{ parameters .environment }}
         pool:
-          name: $(agentPool)
+          name: ${{ parameters.agentPool }}
         workspace:
           clean: all
         strategy:
