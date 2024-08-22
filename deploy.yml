@@ -15,7 +15,7 @@ parameters:
   - name: jsonPath
     type: string
   - name: agentPool
-    type: string
+    type: object
     default:
       vmImage: ubuntu-latest
 
