@@ -51,7 +51,7 @@ stages:
                       
                       foreach ($resource in $json) {
                         Write-Host "Processing $resource.name"
-
+                      }
 #                      $body = Get-Content ${{ deployment.payload }} | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 10
 #                      $uri = "https://$(serviceName).search.windows.net/${{ parameters.resourceType }}('${{ deployment.name }}')?api-version=${apiVersion}"
 #
@@ -64,4 +64,4 @@ stages:
 #                      Invoke-RestMethod -Method PUT -Uri $uri -Body $body -Headers @{
 #                        "Authorization" = $token
 #                        "Content-Type"  = "application/json"
-                      }
+#                      }
