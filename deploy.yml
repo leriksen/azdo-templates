@@ -50,7 +50,7 @@ stages:
                       $json = Get-Content ${{ parameters.jsonPath }}/${{ parameters.environment }}/data.json | ConvertFrom-Json
                       
                       foreach ($resource in $json) {
-                        Write-Host "Processing " $resource.name
+                        Write-Host "Processing ${resource.name}"
                         $resourceName = $resource.name
                       
                         $body = $resource.payload | ConvertTo-Json -Compress -Depth 10
