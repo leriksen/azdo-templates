@@ -52,7 +52,7 @@ stages:
                       $json = Get-Content ${{ parameters.jsonPath }}/${{ parameters.environment }}/data.json | ConvertFrom-Json
                       
                       foreach ($resource in $json) {
-                        Write-Host "Processing $resource.name"
+                        Write-Host "Processing ($resource.name)"
                       }
 #                      $body = Get-Content ${{ deployment.payload }} | ConvertFrom-Json | ConvertTo-Json -Compress -Depth 10
 #                      $uri = "https://$(serviceName).search.windows.net/${{ parameters.resourceType }}('${{ deployment.name }}')?api-version=${apiVersion}"
