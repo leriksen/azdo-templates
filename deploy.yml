@@ -27,8 +27,7 @@ stages:
       - deployment: deploy_${{ parameters.resourceType }}
         displayName: Deploy ${{ parameters.resourceType }}
         environment: ${{ parameters .environment }}
-        pool:
-          name: ${{ parameters.agentPool }}
+        pool: ${{ parameters.agentPool }}
         workspace:
           clean: all
         strategy:
