@@ -18,6 +18,8 @@ parameters:
     type: object
     default:
       vmImage: ubuntu-latest
+  - name: dataRepo
+    type: string
 
 stages:
   - stage: deploy
@@ -34,7 +36,7 @@ stages:
           runOnce:
             deploy:
               steps:
-                - checkout: self
+                - checkout: ${{ parameters.dataRepo }}
 
                 - task: AzureCLI@2
                   displayName: create resource ${{ parameters.resourceType }}
