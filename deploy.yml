@@ -49,7 +49,7 @@ stages:
                       
                       Write-Host "creating ${{ parameters.resourceType }}, in $(serviceName), using data files from ${{ parameters.jsonPath }}" 
                       
-                      $jsonFiles = Get-ChildItem "${{ parameters.jsonPath }}/${{ parameters.environment }}" -Filter *.json
+                      $jsonFiles = Get-ChildItem "${{ parameters.jsonPath }}/${{ parameters.resourceType }}/${{ parameters.environment }}" -Filter *.json
                       
                       foreach ($jsonFile in $jsonFiles) {
                         Write-Host "Processing $jsonFile"
