@@ -50,7 +50,7 @@ stages:
                       $jsonFiles = Get-ChildItem "${{ parameters.jsonPath }}/${{ parameters.environment }}" -Filter *.json
                       
                       foreach ($jsonFile in $jsonFiles) {
-                        Write-Host "Processing $jsonFile
+                        Write-Host "Processing $jsonFile"
                       
                         $json = Get-Content $jsonFile | ConvertFrom-Json
                         $body = $json | ConvertTo-Json -Compress -Depth 10
